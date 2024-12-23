@@ -1,6 +1,7 @@
 #!/bin/bash
 
 # Скрипт для создания самоподписного сертификата на 10 лет
+
 # Убедись, что OpenSSL установлен
 if ! command -v openssl &> /dev/null; then
   echo "OpenSSL не установлен. Устанавливаю OpenSSL..."
@@ -15,7 +16,7 @@ fi
 if ! command -v qrencode &> /dev/null; then
   echo "qrencode не установлен. Устанавливаю qrencode..."
   sudo apt update && sudo apt install -y qrencode
-  if [ $? -ne 0 ]; then
+  if [ $? -ne 0 ];then
     echo "Не удалось установить qrencode. Завершаю скрипт."
     exit 1
   fi
@@ -24,20 +25,36 @@ fi
 # Вывод сообщения с ASCII-артом
 cat << "EOF"
 ============================================================
-       Подпишись на нас на Youtube: anten-ka
+       ПОДПИШИСЬ НА НАС НА YOUTUBE: ANTEN-KA
 ============================================================
 EOF
 
 # Генерация QR-кода для чаевых
+echo "############################################################"
+echo "#                    QR-КОД ДЛЯ ЧАЕВЫХ                     #"
+echo "############################################################"
 TIP_LINK="https://pay.cloudtips.ru/p/7410814f"
-echo "Сканируй QR-код для чаевых:"
 qrencode -t ANSIUTF8 "$TIP_LINK"
+
+# Разделитель
+echo "############################################################"
+echo "#                      QR-КОД YOUTUBE                      #"
+echo "############################################################"
+YT_LINK="https://www.youtube.com/antenkaru"
+qrencode -t ANSIUTF8 "$YT_LINK"
+
+echo "############################################################"
+echo "#                      QR-КОД BOOSTY                       #"
+echo "############################################################"
+BOOSTY_LINK="https://boosty.to/anten-ka"
+qrencode -t ANSIUTF8 "$BOOSTY_LINK"
+
 echo "============================================================"
 
 # Параметры сертификата
 CERT_DIR="/etc/ssl/self_signed_cert" # Директория для сохранения сертификата
-CERT_NAME="self_signed" # Имя сертификата
-DAYS_VALID=3650 # Срок действия сертификата (10 лет)
+CERT_NAME="self_signed"              # Имя сертификата
+DAYS_VALID=3650                      # Срок действия сертификата (10 лет)
 
 # Создаем директорию для сертификата, если ее нет
 mkdir -p "$CERT_DIR"
@@ -53,10 +70,14 @@ openssl req -x509 -nodes -days $DAYS_VALID -newkey rsa:2048 \
   -subj "/C=US/ST=State/L=City/O=Organization/OU=Department/CN=example.com"
 
 if [ $? -eq 0 ]; then
-  echo "Самоподписной сертификат успешно создан."
-  echo "Сертификат: $CERT_PATH"
-  echo "Ключ: $KEY_PATH"
+  echo "САМОПОДПИСНОЙ СЕРТИФИКАТ УСПЕШНО СОЗДАН."
+  echo "ТРЕБУЕТСЯ В ПАНЕЛИ 3X-UI В БЕЗОПАСНОСТИ ПРОПИСАТЬ ДАННЫЕ ПУТИ:"
+  echo "SSL CERTIFICATE PATH: $CERT_PATH"
+  echo "SSL KEY PATH: $KEY_PATH"
+  echo "СЕРТИФИКАТ: $CERT_PATH"
+  echo "КЛЮЧ: $KEY_PATH"
 else
-  echo "Ошибка при создании сертификата."
+  echo "ОШИБКА ПРИ СОЗДАНИИ СЕРТИФИКАТА."
   exit 1
 fi
+
