@@ -16,7 +16,7 @@ fi
 if ! command -v qrencode &> /dev/null; then
   echo "qrencode не установлен. Устанавливаю qrencode..."
   sudo apt update && sudo apt install -y qrencode
-  if [ $? -ne 0 ];then
+  if [ $? -ne 0 ]; then
     echo "Не удалось установить qrencode. Завершаю скрипт."
     exit 1
   fi
@@ -36,6 +36,9 @@ echo "############################################################"
 TIP_LINK="https://pay.cloudtips.ru/p/7410814f"
 qrencode -t ANSIUTF8 "$TIP_LINK"
 
+# Разделитель (20 пустых строк)
+for i in {1..20}; do echo ""; done
+
 # Разделитель
 echo "############################################################"
 echo "#                      QR-КОД YOUTUBE                      #"
@@ -43,11 +46,17 @@ echo "############################################################"
 YT_LINK="https://www.youtube.com/antenkaru"
 qrencode -t ANSIUTF8 "$YT_LINK"
 
+# Разделитель (20 пустых строк)
+for i in {1..20}; do echo ""; done
+
 echo "############################################################"
 echo "#                      QR-КОД BOOSTY                       #"
 echo "############################################################"
 BOOSTY_LINK="https://boosty.to/anten-ka"
 qrencode -t ANSIUTF8 "$BOOSTY_LINK"
+
+# Разделитель (20 пустых строк)
+for i in {1..20}; do echo ""; done
 
 echo "============================================================"
 
