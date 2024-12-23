@@ -25,7 +25,7 @@ fi
 # Проверка и установка 3x-ui
 if ! command -v 3x-ui &> /dev/null; then
   echo "3X-UI не установлен. Устанавливаю 3X-UI..."
-  bash <(curl -Ls https://raw.githubusercontent.com/3x-ui/3x-ui/master/install.sh)
+  bash <(curl -Ls https://raw.githubusercontent.com/MHSanaei/3x-ui/master/install.sh)
   if [ $? -ne 0 ]; then
     echo "Не удалось установить 3X-UI. Завершаю скрипт."
     exit 1
