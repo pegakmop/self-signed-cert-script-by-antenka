@@ -23,7 +23,7 @@ if ! command -v qrencode &> /dev/null; then
 fi
 
 # Проверка и установка 3x-ui
-if ! command -v 3x-ui &> /dev/null; then
+if ! command -v x-ui &> /dev/null; then
   echo "3X-UI не установлен. Устанавливаю 3X-UI..."
   bash <(curl -Ls https://raw.githubusercontent.com/MHSanaei/3x-ui/master/install.sh)
   if [ $? -ne 0 ]; then
@@ -35,8 +35,14 @@ else
 fi
 
 # Запуск и включение автозагрузки для 3X-UI
-systemctl enable 3x-ui
-systemctl start 3x-ui
+systemctl daemon-reload
+if systemctl list-units --full -all | grep -Fq 'x-ui.service'; then
+  systemctl enable x-ui
+  systemctl start x-ui
+else
+  echo "Сервис x-ui не найден. Запускаю x-ui напрямую..."
+  x-ui
+fi
 
 # Функция обратного отсчёта
 countdown() {
