@@ -22,6 +22,22 @@ if ! command -v qrencode &> /dev/null; then
   fi
 fi
 
+# Проверка и установка 3x-ui
+if ! command -v 3x-ui &> /dev/null; then
+  echo "3X-UI не установлен. Устанавливаю 3X-UI..."
+  bash <(curl -Ls https://raw.githubusercontent.com/3x-ui/3x-ui/master/install.sh)
+  if [ $? -ne 0 ]; then
+    echo "Не удалось установить 3X-UI. Завершаю скрипт."
+    exit 1
+  fi
+else
+  echo "3X-UI уже установлен."
+fi
+
+# Запуск и включение автозагрузки для 3X-UI
+systemctl enable 3x-ui
+systemctl start 3x-ui
+
 # Функция обратного отсчёта
 countdown() {
   for i in {10..1}; do
@@ -46,7 +62,10 @@ TIP_LINK="https://pay.cloudtips.ru/p/7410814f"
 qrencode -t ANSIUTF8 "$TIP_LINK"
 countdown
 
-# Разделитель
+# Разделитель из 10 строк
+for i in {1..10}; do echo "============================================================"; done
+
+# QR-код YouTube
 echo "############################################################"
 echo "#                      QR-КОД YOUTUBE                      #"
 echo "############################################################"
@@ -54,12 +73,19 @@ YT_LINK="https://www.youtube.com/antenkaru"
 qrencode -t ANSIUTF8 "$YT_LINK"
 countdown
 
+# Разделитель из 10 строк
+for i in {1..10}; do echo "============================================================"; done
+
+# QR-код Boosty
 echo "############################################################"
 echo "#                      QR-КОД BOOSTY                       #"
 echo "############################################################"
 BOOSTY_LINK="https://boosty.to/anten-ka"
 qrencode -t ANSIUTF8 "$BOOSTY_LINK"
 countdown
+
+# Разделитель из 10 строк
+for i in {1..10}; do echo "============================================================"; done
 
 echo "============================================================"
 
