@@ -43,6 +43,16 @@ wait_for_enter() {
   read -r
 }
 
+# Функция автоматического ответа 'n' через 5 секунд
+auto_reply_n() {
+  echo -e "Would you like to customize the Panel Port settings? (If not, a random port will be applied) [y/n]: "
+  read -t 5 -p "Ожидание ответа в течение 5 секунд... " response
+  if [ -z "$response" ]; then
+    response="n"
+    echo "$response"
+  fi
+}
+
 # ASCII-арт
 cat << "EOF"
 ============================================================
@@ -102,3 +112,6 @@ if [ $? -eq 0 ]; then
 else
   exit 1
 fi
+
+# Автоматический ответ для настройки порта
+auto_reply_n
