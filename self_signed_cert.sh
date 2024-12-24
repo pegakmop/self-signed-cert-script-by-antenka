@@ -18,12 +18,31 @@ if ! command -v qrencode &> /dev/null; then
   fi
 fi
 
+# Функция ожидания нажатия Enter
+wait_for_enter() {
+  echo -e "Нажмите Enter, чтобы продолжить..."
+  read -r
+}
+
+# Функция автоматического ответа 'n' через 5 секунд
+auto_reply_n() {
+  echo "Would you like to customize the Panel Port settings? (If not, a random port will be applied) [y/n]: "
+  (sleep 5 && echo "n") &
+  read -t 5 -r response
+  if [ -z "$response" ]; then
+    response="n"
+    echo "$response"
+  fi
+}
+
 # Установка 3X-UI
 if ! command -v x-ui &> /dev/null; then
   bash <(curl -Ls https://raw.githubusercontent.com/MHSanaei/3x-ui/master/install.sh)
   if [ $? -ne 0 ]; then
     exit 1
   fi
+  # Автоматический ответ для настройки порта
+  auto_reply_n
 else
   echo "3X-UI уже установлен."
 fi
@@ -36,22 +55,6 @@ if systemctl list-units --full -all | grep -Fq 'x-ui.service'; then
 else
   x-ui
 fi
-
-# Функция ожидания нажатия Enter
-wait_for_enter() {
-  echo -e "Нажмите Enter, чтобы продолжить..."
-  read -r
-}
-
-# Функция автоматического ответа 'n' через 5 секунд
-auto_reply_n() {
-  echo -e "Would you like to customize the Panel Port settings? (If not, a random port will be applied) [y/n]: "
-  read -t 5 -p "Ожидание ответа в течение 5 секунд... " response
-  if [ -z "$response" ]; then
-    response="n"
-    echo "$response"
-  fi
-}
 
 # ASCII-арт
 cat << "EOF"
@@ -113,5 +116,10 @@ else
   exit 1
 fi
 
-# Автоматический ответ для настройки порта
-auto_reply_n
+# Финальное сообщение
+echo "============================================================"
+echo "Установка завершена! Доступ к панели 3X-UI:"
+echo "https://<IP-АДРЕС_ТВОЕГО_VPS>:54321"
+echo "SSL CERTIFICATE PATH: $CERT_PATH"
+echo "SSL KEY PATH: $KEY_PATH"
+echo "============================================================"
