@@ -24,25 +24,12 @@ wait_for_enter() {
   read -r
 }
 
-# Функция автоматического ответа 'n' через 5 секунд
-auto_reply_n() {
-  echo "Would you like to customize the Panel Port settings? (If not, a random port will be applied) [y/n]: "
-  (sleep 5 && echo "n") &
-  read -t 5 -r response
-  if [ -z "$response" ]; then
-    response="n"
-    echo "$response"
-  fi
-}
-
 # Установка 3X-UI
 if ! command -v x-ui &> /dev/null; then
   bash <(curl -Ls https://raw.githubusercontent.com/MHSanaei/3x-ui/master/install.sh)
   if [ $? -ne 0 ]; then
     exit 1
   fi
-  # Автоматический ответ для настройки порта
-  auto_reply_n
 else
   echo "3X-UI уже установлен."
 fi
